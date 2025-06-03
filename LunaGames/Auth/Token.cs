@@ -14,7 +14,7 @@ public class Token: IToken
     public int GetId()
     {
         return Convert.ToInt32(
-            _claims.Claims.Single(c => c.Type == "NameIdentifier").Value
+            _claims.Claims.Single(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value
         );
     }
 

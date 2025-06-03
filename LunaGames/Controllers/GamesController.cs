@@ -6,7 +6,6 @@ using LunaGames.Auth;
 
 namespace LunaGames.Controllers;
 
-[Authorize(Roles = "user")]
 [ApiController]
 [Route("[controller]")]
 public class GamesController : ControllerBase
@@ -26,74 +25,42 @@ public class GamesController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] Game game)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            return BadRequest(ModelState);
+        }
 
-            await _gameService.Create(game);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ocorreu erro no Create {@game}", game);
-            return StatusCode(500, "Ocorreu um erro no Create");        
-        }
+        await _gameService.Create(game);
+        return Ok();
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update([FromBody] Game game, [FromRoute] int id)
     {
-        try
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            
-            await _gameService.Update(game, id);
-            return Ok();
+            return BadRequest(ModelState);
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ocorreu erro no Update {@login}", game);
-            return StatusCode(500, "Ocorreu um erro no Update");        
-        }
+        
+        await _gameService.Update(game, id);
+        return Ok();
     }
 
     [HttpGet]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> List()
     {
-        try
-        {
-            var games = await _gameService.List(_token.GetId());
-            return Ok(games);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ocorreu erro no List");
-            return StatusCode(500, "Ocorreu um erro no List");        
-        }
+        var games = await _gameService.List(_token.GetId());
+        return Ok(games);
     }
 
     [HttpPost("UserLink")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UserLink([FromBody] Game game)
     {
-        try
-        {
-            await _gameService.UserLink(_token.GetId());
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ocorreu erro no Create {@game}", game);
-            return StatusCode(500, "Ocorreu um erro no Create");        
-        }
+        await _gameService.UserLink(_token.GetId());
+        return Ok();
     }
 }
 
