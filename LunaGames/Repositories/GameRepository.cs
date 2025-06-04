@@ -32,6 +32,13 @@ public class GameRepository : IGameRepository
         return await connection.QueryAsync<Game>(sql, new { userId });
     }
 
+    public async Task<IEnumerable<Game>> List()
+    {
+        var sql = "SELECT * FROM Game";
+        using var connection = new NpgsqlConnection(_connectionString);
+        return await connection.QueryAsync<Game>(sql);
+    }
+
     public async Task Update(Game game)
     {
         var sql = @"UPDATE Game 
@@ -41,12 +48,11 @@ public class GameRepository : IGameRepository
         await connection.ExecuteAsync(sql, game);
     }
 
-    public async Task UserLink(int userId)
+    public async Task UserLink(int gameId, int userId)
     {
-        var sql = @"UPDATE Game 
-                    SET Title = @Title, Type = @Type, Description = @Description 
-                    WHERE Id = @Id";
+        var sql = @"INSERT INTO UserGame (GameId, UserId) 
+                    VALUES (@gameId, @userId)";
         using var connection = new NpgsqlConnection(_connectionString);
-        await connection.ExecuteAsync(sql, userId);
+        await connection.ExecuteAsync(sql, new { gameId, userId });
     }
 }

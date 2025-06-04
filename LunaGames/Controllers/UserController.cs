@@ -24,8 +24,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            await _userService.Get(id);
-            return Ok();
+            return Ok(await _userService.Get(id));
         }
         catch (Exception ex)
         {

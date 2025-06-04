@@ -28,8 +28,13 @@ public class GameService
         return await _gameRepository.List(userId);
     }
 
-    public async Task UserLink(int userId)
+    public async Task<IEnumerable<Game>> List()
     {
-        await _gameRepository.UserLink(userId);
+        return await _gameRepository.List();
+    }
+
+    public async Task UserLink(int gameId, int userId)
+    {
+        await _gameRepository.UserLink(gameId, userId);
     }
 }

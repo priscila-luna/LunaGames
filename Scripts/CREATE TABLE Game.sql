@@ -1,0 +1,6 @@
+CREATE TABLE Game (
+    Id SERIAL PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Type VARCHAR(100) NOT NULL,
+    Description TEXT
+);

@@ -47,19 +47,27 @@ public class GamesController : ControllerBase
         return Ok();
     }
 
-    [HttpGet]
+    [HttpGet("ListUserGame")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> ListUserGame()
     {
         var games = await _gameService.List(_token.GetId());
         return Ok(games);
     }
 
-    [HttpPost("UserLink")]
-    [Authorize(Roles = "User")]
-    public async Task<IActionResult> UserLink([FromBody] Game game)
+    [HttpGet]
+    [Authorize(Roles = "User,Admin")]
+    public async Task<IActionResult> List()
     {
-        await _gameService.UserLink(_token.GetId());
+        var games = await _gameService.List();
+        return Ok(games);
+    }
+
+    [HttpPost("UserLink/{gameId}")]
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> UserLink([FromRoute] int gameId)
+    {
+        await _gameService.UserLink(gameId, _token.GetId());
         return Ok();
     }
 }
