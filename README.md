@@ -34,6 +34,7 @@ Construir um MVP funcional para a plataforma **Luna Games** que permita:
 - [.NET 8 SDK]
 - [PostgreSQL]
 - [VS Code]
+- [Docker]
 
 ### Passos para rodar o projeto
 

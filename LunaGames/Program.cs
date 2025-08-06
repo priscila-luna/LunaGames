@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 using LunaGames.Auth;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +86,9 @@ builder.Services.AddSwaggerGen(opt =>
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
+
+app.UseHttpMetrics();
+app.MapMetrics();
 
 app.UseExceptionHandler(config =>
 {

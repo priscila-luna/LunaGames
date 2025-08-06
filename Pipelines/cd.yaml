@@ -1,0 +1,32 @@
+# .github/workflows/cd.yml
+name: CD - LunaGames
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI - LunaGames"]
+    types:
+      - completed
+
+env:
+  IMAGE_TAG: latest
+
+jobs:
+  deploy:
+    name: Deploy no ECS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login no ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Deploy para ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: .aws/task-definition.json
+          service: ${{ secrets.ECS_SERVICE_NAME }}
+          cluster: ${{ secrets.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
